@@ -1,6 +1,6 @@
 class NetworkConstants {
   //urls
-  static const BASE_URL = "https://raw.githubusercontent.com/AliAkberAakash/hello_world/main/response.json";
+  static const BASE_URL = "https://bd.ezassist.me/ws/mpFeed";
 
   //header parameters
   static const ACCEPT = "Accept";

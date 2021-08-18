@@ -1,3 +1,4 @@
+import 'package:audacity_task/data/models/home/trending_seller_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/pages/empty_page.dart';
@@ -15,7 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  MessageResponse? _response;
+  List<TrendingSellerResponse>? _response;
 
   @override
   void initState() {
@@ -32,7 +33,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: BlocProvider(
         create: (context) => HomeBloc(repository: locator<Repository>())
-        ..add(GetMessageEvent()), //load data at the start
+        ..add(GetTrendingSellerEvent()), //load data at the start
         child: Builder(
           builder: (ctxB){
             print("Event was loaded");
@@ -40,17 +41,13 @@ class _HomePageState extends State<HomePage> {
               builder: (ctx, state){
                 if(state is HomeLoadingState){
                   return LoadingPage();
-                }else if(state is HomeLoadedState) {
-                  if(state.response!=null){
-                    _response = state.response; //in case we need the response
-                    if(state.response.success){
-                      return Center(
-                        child: Text(
-                          checkNull(_response?.message),
-                        ),
-                      );
-                    }
-                  }
+                }else if(state is HomeTrendingSellerLoadedState) {
+                  _response = state.response; //in case we need the response
+                  return Center(
+                    child: Text(
+                      checkNull(_response?[0].sellerName),
+                    ),
+                  );
                 }
                 return EmptyPage(message: "Failed to load data from the server",);
               },

@@ -8,3 +8,8 @@ class GetMessageEvent extends HomeEvent {
   @override
   List<Object> get props => [];
 }
+
+class GetTrendingSellerEvent extends HomeEvent {
+  @override
+  List<Object> get props => [];
+}

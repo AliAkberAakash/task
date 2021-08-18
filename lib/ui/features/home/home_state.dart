@@ -24,6 +24,16 @@ class HomeLoadedState extends HomeState {
   List<Object> get props => [response];
 }
 
+class HomeTrendingSellerLoadedState extends HomeState {
+
+  final List<TrendingSellerResponse> response;
+
+  HomeTrendingSellerLoadedState({required this.response});
+
+  @override
+  List<Object> get props => [response];
+}
+
 class HomeFailureState extends HomeState {
   @override
   List<Object> get props => [];
