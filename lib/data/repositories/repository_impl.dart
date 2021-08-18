@@ -40,8 +40,9 @@ class RepositoryImpl extends Repository{
         final response = await remoteDataSource.getTrendingSellers();
         await SharedPrefUtil.writeStringList(
             "trending_sellers", response.map((e) => jsonEncode(e.toJson())).toList());
-        return response;
-      }else return getLocalTrendingSellers();
+      }
+
+      return getLocalTrendingSellers();
   }
 
   @override
