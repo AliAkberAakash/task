@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         accentColor: accent,
 
         // Define the default font family.
-        fontFamily: 'Georgia',
+        fontFamily: 'Lato',
 
       ),
       home: HomePage(),
