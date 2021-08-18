@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:audacity_task/core/failure/exceptions/network_exception.dart';
 import 'package:audacity_task/data/models/home/trending_seller_response.dart';
+import 'package:audacity_task/utils/shared_pref_utils.dart';
 
 import '../../core/network/network_info.dart';
 import '../datasources/local_datasource/local_datasource.dart';
@@ -31,25 +36,28 @@ class RepositoryImpl extends Repository{
 
   @override
   Future<List<TrendingSellerResponse>> getTrendingSellers() async{
-    if(await networkInfo.isConnected) {
-      final response = await remoteDataSource.getTrendingSellers();
+      if(await networkInfo.isConnected){
+        final response = await remoteDataSource.getTrendingSellers();
+        await SharedPrefUtil.writeStringList(
+            "trending_sellers", response.map((e) => jsonEncode(e.toJson())).toList());
+        return response;
+      }else return getLocalTrendingSellers();
+  }
 
-      print("in repo $response");
+  @override
+  Future<List<TrendingSellerResponse>> getLocalTrendingSellers() async{
+    try {
+      final responseString = await SharedPrefUtil.getStringList("trending_sellers");
 
-      // if(response.isNotEmpty){
-      //   if(response[0].isNotEmpty){
-      //     return response[0][0];
-      //   }
-      // }
-      // if (response.success) {
-      //   localDataSource.setMessageResponse(response); //if there is data then store it in db
-      // }
+      var response = responseString.map((e) =>
+          TrendingSellerResponse.fromJson(jsonDecode(e))).toList();
 
       return response;
+    }catch(e){
+      print(e);
     }
 
     return Future.value(null);
-    //return localDataSource.getMessageResponse(); // always return local data
   }
 
 }

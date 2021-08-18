@@ -27,10 +27,9 @@ dependencies:
   # Dio for http connection
   dio: ^4.0.0
   # Data connection checker
-
+  connectivity_plus: ^1.0.6
   # cached network image
   cached_network_image: ^3.1.0
-
   # Bloc for state management
   flutter_bloc: ^7.1.0
   # Value Equality
