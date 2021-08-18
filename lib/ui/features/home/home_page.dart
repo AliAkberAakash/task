@@ -1,4 +1,7 @@
 import 'package:audacity_task/data/models/home/trending_seller_response.dart';
+import 'package:audacity_task/ui/features/home/widgets/trending_sellers_widget.dart';
+import 'package:audacity_task/utils/dimens.dart';
+import 'package:audacity_task/utils/spacers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/pages/empty_page.dart';
@@ -26,35 +29,41 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Home"
-        ),
-      ),
-      body: BlocProvider(
-        create: (context) => HomeBloc(repository: locator<Repository>())
-        ..add(GetTrendingSellerEvent()), //load data at the start
-        child: Builder(
-          builder: (ctxB){
-            print("Event was loaded");
-            return BlocBuilder<HomeBloc, HomeState>(
-              builder: (ctx, state){
-                if(state is HomeLoadingState){
-                  return LoadingPage();
-                }else if(state is HomeTrendingSellerLoadedState) {
-                  _response = state.response; //in case we need the response
-                  return Center(
-                    child: Text(
-                      checkNull(_response?[0].sellerName),
-                    ),
+      body: LayoutBuilder(builder: (ctx, constraints){
+        return ListView(
+          children: [
+            VSpacer20(),
+            BlocProvider(
+              create: (context) => HomeBloc(repository: locator<Repository>())
+                ..add(GetTrendingSellerEvent()), //load data at the start
+              child: Builder(
+                builder: (ctxB){
+                  return BlocBuilder<HomeBloc, HomeState>(
+                    builder: (ctx, state){
+                      if(state is HomeLoadingState){
+                        return LoadingPage();
+                      }else if(state is HomeTrendingSellerLoadedState) {
+                        _response = state.response; //in case we need the response
+                        return TrendingSellersWidget(
+                          response: _response!,
+                          height: dp230,
+                        );
+                      }
+                      return  Center(child: Text("Failed to load data from the server"));
+                    },
                   );
-                }
-                return EmptyPage(message: "Failed to load data from the server",);
-              },
-            );
-          },
-        ),
-      ),
+                },
+              ),
+            ),
+          ],
+        );
+      }),
     );
   }
+
+
+
+
+
+
 }
